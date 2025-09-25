@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  name           String
+  profile_img    String
+  email          String
+  age            Int
+  hashedPassword String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  Habit          Habit[] // 1 to many relationship with Habit
+}
+
+enum Status {
+  INCOMPLETE // has to be done
+  COMPLETED // done
+  MISSED // not done
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum Category {
+  WORK
+  PERSONAL
+  HEALTH
+  FITNESS
+  HOBBY
+  STUDY
+  MINDSET
+  OTHER
+}
+
+model Habit {
+  id        Int      @id @default(autoincrement())
+  title     String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  startTime DateTime
+  endTime   DateTime
+  date      DateTime @default(now())
+  priority  Priority @default(MEDIUM)
+  status    Status   @default(INCOMPLETE)
+  category  Category @default(OTHER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+// Thu habit
+// Fri habit

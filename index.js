@@ -13,10 +13,6 @@ app.get('/', (req, res) => {
     res.status(200).json({ message: 'app is healthy', data: true });
 });
 
-
-
-
-
 // User routes
 app.use('/user', require('./app/route/user'))
 

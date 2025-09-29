@@ -5,3 +5,10 @@
     3.2 npx prisma init --db --output ../generated/prisma 
     3.3 write complete model
     3.4 npx prisma migrate
+
+
+Assignment : 
+get /habit/:userId {filter, sorting}
+post /habit/:userId
+patch /habit/:id
+put /habit/:id

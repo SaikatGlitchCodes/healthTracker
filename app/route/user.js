@@ -5,6 +5,8 @@ const cloudinary = require('../../util/cloudinary');
 const multer = require('multer');
 const storage = multer.diskStorage({});
 const upload = multer({ storage });
+const bcrypt = require('bcrypt');
+const isAuthenticatedRoute = require('../middleware/auth/isAuthenticated');
 
 Router.post('/image-upload/:id', upload.single("image"), async (req, res) => {
     console.log('Uploading files from the browser');
@@ -32,22 +34,21 @@ Router.post('/image-upload/:id', upload.single("image"), async (req, res) => {
     }
 });
 
-
 Router.post('/', async (req, res) => {
-    const data = req.body;
+    const {name, email, password, age, profile_img} = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     try {
-        const response = await prisma.user.create({ data });
+        const response = await prisma.user.create({data:{name, email, hashedPassword, age, profile_img}});
         res.status(201).json({ message: 'user created', data: response });
     } catch (err) {
         res.status(500).json({ message: 'internal server error', error: err.message });
     }
 });
 
-
-Router.get('/:id',async(req, res)=>{
-    const {id} = req.params;
+Router.get('/',isAuthenticatedRoute ,async(req, res)=>{
     try{
-        const response = await prisma.user.findFirstOrThrow({where : { id: Number(id)}});
+        const response = await prisma.user.findFirstOrThrow({where : { id: Number(req.user)}});
         res.status(200).json({ message: 'Found a user', data: response });
     }catch(err){
         res.status(500).json({ message: 'User not found', error: err.message });

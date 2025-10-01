@@ -4,7 +4,7 @@ const prisma = require('../../../util/primaInit');
 const bcrypt = require('bcrypt');
 
 module.exports = passport.use(new LocalStrategy(async (username, password, done) => {
-    console.log('LocalStrategy',username, passport)
+    console.log('LocalStrategy',username, password)
     try {
         const response = await prisma.user.findFirstOrThrow({
             where: {
@@ -19,4 +19,3 @@ module.exports = passport.use(new LocalStrategy(async (username, password, done)
         return done(err, false)
     }
 }));
-

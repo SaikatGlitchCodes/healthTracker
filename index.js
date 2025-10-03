@@ -8,12 +8,11 @@ require('dotenv').config();
 const session = require('express-session');
 const isAuthenticated = require('./app/middleware/auth/isAuthenticated')
 
-
 //all global middlewares
 app.use(bodyParser.json());
 app.use(cors({
   origin: 'http://localhost:3000',  // your frontend URL
-  credentials: true  // enable credentials (cookies, authorization headers)
+  credentials: true   //enable credentials (cookies, authorization headers)
 }));
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize())
@@ -36,10 +35,6 @@ passport.deserializeUser((id, done) => {
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'app is healthy', data: true });
 });
-
-app.get('/protected', isAuthenticated, (req, res) => {
-    res.json({ message: "Logic" })
-})
 
 // User routes
 app.use('/user', require('./app/route/user'));
@@ -72,12 +67,14 @@ app.get('/auth/github/callback',
 );
 
 app.get('/logout', (req, res) => {
-    console.log("logged Out")
-    req.logout((err) => {
-        if (err) { return next(err); }
-        return res.status(200).json({ message: 'Successfully logout user' });
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ message: 'Logout failed', error: err.message });
+        }
+        res.status(200).json({ message: 'Logged out successfully' });
     });
-})
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

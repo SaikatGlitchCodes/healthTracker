@@ -27,7 +27,7 @@ Router.get('/', async (req, res) => {
     try {
         const habits = await prisma.habit.findMany({
             where: { userId: req.user.id },
-            orderBy: { date: 'desc' }
+            orderBy: { startTime: 'desc' }
         });
         res.status(200).json({ message: 'Habits retrieved', data: habits });
     } catch (err) {

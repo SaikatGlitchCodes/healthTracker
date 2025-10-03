@@ -32,17 +32,10 @@ Router.post('/image-upload', isAuthenticatedRoute, upload.single("image"), async
     }
 });
 
-// Register a new user
 Router.post('/register', async (req, res) => {
     const {name, email, password, age, profile_img} = req.body;
     
     try {
-        // Check if user already exists
-        const existingUser = await prisma.user.findUnique({ where: { email } });
-        if (existingUser) {
-            return res.status(400).json({ message: 'User already exists with this email' });
-        }
-
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await prisma.user.create({
             data: {
@@ -72,16 +65,6 @@ Router.post('/register', async (req, res) => {
     }
 });
 
-// Logout user
-Router.post('/logout', isAuthenticatedRoute, (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            return res.status(500).json({ message: 'Logout failed', error: err.message });
-        }
-        res.status(200).json({ message: 'Logged out successfully' });
-    });
-});
-
 Router.get('/', isAuthenticatedRoute, async(req, res) => {
     try {
         const response = await prisma.user.findFirstOrThrow({
@@ -95,11 +78,12 @@ Router.get('/', isAuthenticatedRoute, async(req, res) => {
 
 Router.patch('/', isAuthenticatedRoute, async(req, res) => {
     const userId = req.user.id;
-    const data = req.body;
+    const { name, email, age, profile_img } = req.body;
+    console.log('Updating user', userId, { name, email, age, profile_img });
     try {
         const response = await prisma.user.update({
             where: { id: Number(userId) },
-            data: data
+            data: { name, email, age: Number(age), profile_img }
         });
         res.status(200).json({ message: 'Updated successfully', data: response });
     } catch(err) {

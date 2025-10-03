@@ -6,11 +6,12 @@ const bcrypt = require('bcrypt');
 module.exports = passport.use(new LocalStrategy(async (username, password, done) => {
     console.log('LocalStrategy',username, password)
     try {
-        const response = await prisma.user.findFirstOrThrow({
+        const response = await prisma.user.findFirst({
             where: {
                 name: username
             }
         });
+        if (!response) return done(null, false)
         if(bcrypt.compareSync(password, response.hashedPassword)){
             return done(null, response)
         }

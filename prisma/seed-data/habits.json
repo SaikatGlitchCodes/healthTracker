@@ -1,0 +1,84 @@
+{
+  "habits": [
+    {
+      "title": "Morning Yoga",
+      "startTime": "2025-10-03T06:00:00Z",
+      "endTime": "2025-10-03T06:45:00Z",
+      "priority": "HIGH",
+      "category": "FITNESS",
+      "status": "INCOMPLETE"
+    },
+    {
+      "title": "Read Technical Books",
+      "startTime": "2025-10-03T20:00:00Z",
+      "endTime": "2025-10-03T21:00:00Z",
+      "priority": "MEDIUM",
+      "category": "STUDY",
+      "status": "INCOMPLETE"
+    },
+    {
+      "title": "Meditation",
+      "startTime": "2025-10-03T07:00:00Z",
+      "endTime": "2025-10-03T07:20:00Z",
+      "priority": "HIGH",
+      "category": "MINDSET",
+      "status": "COMPLETED"
+    },
+    {
+      "title": "Code Review",
+      "startTime": "2025-10-03T10:00:00Z",
+      "endTime": "2025-10-03T11:00:00Z",
+      "priority": "CRITICAL",
+      "category": "WORK",
+      "status": "INCOMPLETE"
+    },
+    {
+      "title": "Evening Walk",
+      "startTime": "2025-10-03T18:00:00Z",
+      "endTime": "2025-10-03T18:30:00Z",
+      "priority": "MEDIUM",
+      "category": "HEALTH",
+      "status": "INCOMPLETE"
+    },
+    {
+      "title": "Guitar Practice",
+      "startTime": "2025-10-03T19:00:00Z",
+      "endTime": "2025-10-03T19:30:00Z",
+      "priority": "LOW",
+      "category": "HOBBY",
+      "status": "MISSED"
+    },
+    {
+      "title": "Family Time",
+      "startTime": "2025-10-03T21:00:00Z",
+      "endTime": "2025-10-03T22:00:00Z",
+      "priority": "HIGH",
+      "category": "PERSONAL",
+      "status": "INCOMPLETE"
+    },
+    {
+      "title": "Weekly Planning",
+      "startTime": "2025-10-03T09:00:00Z",
+      "endTime": "2025-10-03T09:30:00Z",
+      "priority": "HIGH",
+      "category": "WORK",
+      "status": "COMPLETED"
+    },
+    {
+      "title": "Learn React Native",
+      "startTime": "2025-10-03T14:00:00Z",
+      "endTime": "2025-10-03T16:00:00Z",
+      "priority": "MEDIUM",
+      "category": "STUDY",
+      "status": "INCOMPLETE"
+    },
+    {
+      "title": "Drink Water Reminder",
+      "startTime": "2025-10-03T08:00:00Z",
+      "endTime": "2025-10-03T20:00:00Z",
+      "priority": "HIGH",
+      "category": "HEALTH",
+      "status": "INCOMPLETE"
+    }
+  ]
+}

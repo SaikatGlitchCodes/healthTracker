@@ -54,6 +54,7 @@ app.get('/check-session', (req, res) => {
     res.status(401).json({ user: null });
   }
 });
+
 // Auth routes
 app.post("/auth/local", passport.authenticate('local'), (req, res)=>{
     console.log('Local strategy');

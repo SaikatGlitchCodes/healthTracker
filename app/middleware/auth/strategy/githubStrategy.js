@@ -1,6 +1,6 @@
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
-const prisma = require('../../../util/primaInit');
+const prisma = require('../../../../util/primaInit');
 
 passport.use(new GitHubStrategy({
     clientID: 'Ov23livPoCnhAh6HYfAm',

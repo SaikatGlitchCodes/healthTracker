@@ -13,10 +13,14 @@ Router.post('/', async (req, res) => {
                 endTime: new Date(endTime),
                 priority: priority || 'MEDIUM',
                 category: category || 'OTHER',
-                userId: req.user.id  // Assuming req.user contains the authenticated user's info
+                userId: req.user.id
             }
         });
-        res.status(201).json({ message: 'Habit created', data: response });
+
+        res.status(201).json({
+            message: 'Habit created',
+            data: response,
+        });
     } catch (err) {
         res.status(500).json({ message: 'Failed to create habit', error: err.message });
     }
@@ -58,7 +62,7 @@ Router.get('/:id', async (req, res) => {
 Router.patch('/:id', async (req, res) => {
     const { id } = req.params;
     const data = req.body;
-    
+
     try {
         const habit = await prisma.habit.findFirst({
             where: {
@@ -113,7 +117,7 @@ Router.delete('/:id', async (req, res) => {
 Router.patch('/:id/status', async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
-    
+
     try {
         const habit = await prisma.habit.findFirst({
             where: {

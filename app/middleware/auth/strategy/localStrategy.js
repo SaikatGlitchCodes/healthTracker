@@ -1,6 +1,6 @@
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy
-const prisma = require('../../../util/primaInit');
+const prisma = require('../../../../util/primaInit');
 const bcrypt = require('bcrypt');
 
 module.exports = passport.use(new LocalStrategy(async (username, password, done) => {

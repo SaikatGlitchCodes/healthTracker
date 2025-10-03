@@ -1,5 +1,5 @@
 const express = require('express');
-const Router = express().router;
+const Router = express.Router();
 const prisma = require('../../util/primaInit');
 const cloudinary = require('../../util/cloudinary');
 const multer = require('multer');
@@ -8,7 +8,7 @@ const upload = multer({ storage });
 const bcrypt = require('bcrypt');
 const isAuthenticatedRoute = require('../middleware/auth/isAuthenticated');
 
-Router.post('/image-upload/:id', upload.single("image"), async (req, res) => {
+Router.post('/image-upload/:id',isAuthenticatedRoute, upload.single("image"), async (req, res) => {
     console.log('Uploading files from the browser');
     const { id } = req.params;
     try {
@@ -46,37 +46,44 @@ Router.post('/', async (req, res) => {
     }
 });
 
-Router.get('/',isAuthenticatedRoute ,async(req, res)=>{
-    try{
-        const response = await prisma.user.findFirstOrThrow({where : { id: Number(req.user)}});
+Router.get('/', isAuthenticatedRoute, async(req, res) => {
+    try {
+        const response = await prisma.user.findFirstOrThrow({
+            where: { id: Number(req.session.userId) }
+        });
         res.status(200).json({ message: 'Found a user', data: response });
-    }catch(err){
+    } catch(err) {
         res.status(500).json({ message: 'User not found', error: err.message });
     }
 });
 
-Router.patch('/:id', async(req,res)=>{
-    const {id} = req.params;
+Router.patch('/', isAuthenticatedRoute, async(req, res) => {
+    const userId = req.session.userId;
     const data = req.body;
-    try{
+    try {
         const response = await prisma.user.update({
-            where:{id: Number(id)},
+            where: { id: Number(userId) },
             data: data
-        })
+        });
         res.status(200).json({ message: 'Updated successfully', data: response });
-    }catch(err){
+    } catch(err) {
         res.status(500).json({ message: 'Failed to update user', error: err.message });
     }
 });
 
-Router.delete('/:id', async(req, res)=>{
-    const {id} = req.params;
-     try{
+Router.delete('/', isAuthenticatedRoute, async(req, res) => {
+    try {
         const response = await prisma.user.delete({
-            where:{id: Number(id)}
-        })
-        res.status(200).json({ message: 'Deleted successfully', data: response });
-    }catch(err){
+            where: { id: Number(req.session.userId) }
+        });
+        // Destroy the session after deleting the user
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Error destroying session:', err);
+            }
+        });
+        res.status(200).json({ message: 'User deleted successfully', data: response });
+    } catch(err) {
         res.status(500).json({ message: 'Failed to delete user', error: err.message });
     }
 });

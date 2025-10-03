@@ -11,7 +11,10 @@ const isAuthenticated = require('./app/middleware/auth/isAuthenticated')
 
 //all global middlewares
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',  // your frontend URL
+  credentials: true  // enable credentials (cookies, authorization headers)
+}));
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize())
 app.use(passport.session())
@@ -22,7 +25,7 @@ require('./app/middleware/auth/githubStrategy');
 
 passport.serializeUser((user, done) => {
     console.log('On serialize', user)
-    done(null, user.id)
+    done(null, user)
 })
 
 passport.deserializeUser((id, done) => {
@@ -39,23 +42,33 @@ app.get('/protected', isAuthenticated, (req, res) => {
 })
 
 // User routes
-app.use('/user', require('./app/route/user'))
+app.use('/user', require('./app/route/user'));
 
+// Habit routes
+app.use('/habit', isAuthenticated, require('./app/route/habit'));
+
+app.get('/check-session', (req, res) => {
+  if (req.user) {
+    res.json({ user: req.user });
+  } else {
+    res.status(401).json({ user: null });
+  }
+});
 // Auth routes
 app.post("/auth/local", passport.authenticate('local'), (req, res)=>{
     console.log('Local strategy');
-    const id = req.user;
-    res.json({message: "Local", id })
+    const data = req.user;
+    res.json({message: "logged in using local strategy", data })
 });
+
 app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
 
 app.get('/auth/github/callback',
-    passport.authenticate('github',
-    function (req, res) {
-        console.log('Logged in')
-        // Successful authentication, redirect home.
-        res.redirect('/');
-    }));
+    passport.authenticate('github', {
+        successRedirect: 'http://localhost:3000/dashboard',
+        failureRedirect: 'http://localhost:3000/login'
+    })
+);
 
 app.get('/logout', (req, res) => {
     console.log("logged Out")
